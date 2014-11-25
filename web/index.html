@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <style>
+          html, body, #map {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+          }
+        </style>
+        <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
+    </head>
+    </body>
+        <div id="map"></div>
+
+        <script type="text/javascript">
+
+        var vientoSubLayerOptions = {
+            sql: "SELECT * FROM v_vien WHERE (fecha >= ('2014-11-20T06:00:00') AND fecha <= ('2014-11-20T06:00:00') AND valor IS NOT NULL)",
+            interactivity: 'cartodb_id'
+          }
+
+        cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
+        .done(function(vis, layers) {
+          layers[1].setInteraction(true);
+
+          layers[1].getSubLayer(0).set(vientoSubLayerOptions);
+
+          // you can get the native map to work with it
+          var map = vis.getNativeMap();
+
+          // now, perform any operations you need, e.g. assuming map is a L.Map object:
+          // map.setZoom(3);
+          // map.panTo([50.5, 30.5]);
+        });
+
+        </script>
+
+    </body>
+</html>
