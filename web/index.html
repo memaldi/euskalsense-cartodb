@@ -69,92 +69,38 @@
         <script type="text/javascript">
 
         var cartoDBLayer;
-        var cartoDBLegends;
-
+        //var cartoDBLegends;
+        //var v_vienColor = ['#43618F', '#4E71A6', '#6182B5', '#849EC5', '#9BB0D0', '#B2C2DB', '#ECF0F6', '#43618F']
+        //var t_c2_baColor = ['#B10026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFFFB2', '#43618F']
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
-          cartoDBLegends = vis.legends;
+          //cartoDBLegends = vis.legends;
         });
 
-        function updateDate() {
-          var fecha = $("#datetime-picker")[0].value;
-
-
-          var temperaturaSubLayerOptions = {
-            sql: "SELECT * FROM t_c2_ba WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)"
-          }
-
+        function updateLayer(date, table_name, sublayer_number) {
           var sql = new cartodb.SQL({ user: 'memaldi' });
 
-          //Viento
-          sql.execute("SELECT MAX(valor), MIN(valor) FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)")
+          sql.execute("SELECT MAX(valor), MIN(valor) FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)")
             .done(function(data) {
-              var min;
-              var max;
-              $.each(data['rows'], function(key, value) {
-                max = value['max'];
-                min = value['min'];
-              });
 
-              var difference = max - min;
-              var interval = difference / 7;
-              var steps = new Array();
-              steps[0] = max - interval;
-              steps[1] = steps[0] - interval;
-              steps[2] = steps[1] - interval;
-              steps[3] = steps[2] - interval;
-              steps[4] = steps[3] - interval;
-              steps[5] = steps[4] - interval;
-
-              var vientoCSS = "#v_vien{ \
-                marker-fill-opacity: 0.8; \
-                marker-line-color: #FFF; \
-                marker-line-width: 1.5; \
-                marker-line-opacity: 1; \
-                marker-width: 15; \
-                marker-fill: #ECF0F6; \
-                marker-allow-overlap: true; \
-              } \
-              #v_vien [ valor <= "+ max +"] { \
-                 marker-fill: #43618F; \
-              } \
-              #v_vien [ valor <= " + steps[0] + "] { \
-                 marker-fill: #4E71A6; \
-              } \
-              #v_vien [ valor <= " + steps[1] + "] { \
-                 marker-fill: #6182B5; \
-              } \
-              #v_vien [ valor <= " + steps[2] + "] { \
-                 marker-fill: #849EC5; \
-              } \
-              #v_vien [ valor <= " + steps[3] + "] { \
-                 marker-fill: #9BB0D0; \
-              } \
-              #v_vien [ valor <= " + steps[4] + "] { \
-                 marker-fill: #B2C2DB; \
-              } \
-              #v_vien [ valor <= " + steps[5] + "] { \
-                 marker-fill: #ECF0F6; \
-              }";
-
-              $("#legend-v_vien .min")[0].innerText = min;
-              $("#legend-v_vien .max")[0].innerText = max;
-
-              var vientoSubLayerOptions = {
-                sql: "SELECT * FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)",
-                cartocss: vientoCSS
+              var subLayerOptions = {
+                sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)"
+                //cartocss: cartoCSS
               }
-              cartoDBLayer.getSubLayer(0).set(vientoSubLayerOptions);
+              cartoDBLayer.getSubLayer(sublayer_number).set(subLayerOptions);
             })
             .error(function(errors) {
               // errors contains a list of errors
               console.log("errors:" + errors);
           });
+        }
 
+        function updateDate() {
+          var date = $("#datetime-picker")[0].value;
 
-          cartoDBLayer.getSubLayer(1).set(temperaturaSubLayerOptions);
-
+          updateLayer(date, "v_vien", 0);
+          updateLayer(date, "t_c2_ba", 1);
         }
 
         </script>
