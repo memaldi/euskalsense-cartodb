@@ -97,11 +97,53 @@
                 min = value['min'];
               });
 
+              var difference = max - min;
+              var interval = difference / 7;
+              var steps = new Array();
+              steps[0] = max - interval;
+              steps[1] = steps[0] - interval;
+              steps[2] = steps[1] - interval;
+              steps[3] = steps[2] - interval;
+              steps[4] = steps[3] - interval;
+              steps[5] = steps[4] - interval;
+
+              var vientoCSS = "#v_vien{ \
+                marker-fill-opacity: 0.8; \
+                marker-line-color: #FFF; \
+                marker-line-width: 1.5; \
+                marker-line-opacity: 1; \
+                marker-width: 15; \
+                marker-fill: #ECF0F6; \
+                marker-allow-overlap: true; \
+              } \
+              #v_vien [ valor <= "+ max +"] { \
+                 marker-fill: #43618F; \
+              } \
+              #v_vien [ valor <= " + steps[0] + "] { \
+                 marker-fill: #4E71A6; \
+              } \
+              #v_vien [ valor <= " + steps[1] + "] { \
+                 marker-fill: #6182B5; \
+              } \
+              #v_vien [ valor <= " + steps[2] + "] { \
+                 marker-fill: #849EC5; \
+              } \
+              #v_vien [ valor <= " + steps[3] + "] { \
+                 marker-fill: #9BB0D0; \
+              } \
+              #v_vien [ valor <= " + steps[4] + "] { \
+                 marker-fill: #B2C2DB; \
+              } \
+              #v_vien [ valor <= " + steps[5] + "] { \
+                 marker-fill: #ECF0F6; \
+              }";
+
               $("#legend-v_vien .min")[0].innerText = min;
               $("#legend-v_vien .max")[0].innerText = max;
 
               var vientoSubLayerOptions = {
-                sql: "SELECT * FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)"
+                sql: "SELECT * FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)",
+                cartocss: vientoCSS
               }
               cartoDBLayer.getSubLayer(0).set(vientoSubLayerOptions);
             })
