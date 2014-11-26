@@ -56,7 +56,7 @@
           <div class="form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input type="datetime-local" class="form-control" id="datetime-picker" style="width: 233px;">
+                <input type="datetime-local" class="form-control" id="datetime-picker" style="width: 233px;" >
               </div>
             </div>
             <button type="submit" class="btn btn-default" onclick="updateDate()">Check</button>
@@ -69,21 +69,31 @@
         <script type="text/javascript">
 
         var cartoDBLayer;
-        //var cartoDBLegends;
-        //var v_vienColor = ['#43618F', '#4E71A6', '#6182B5', '#849EC5', '#9BB0D0', '#B2C2DB', '#ECF0F6', '#43618F']
-        //var t_c2_baColor = ['#B10026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFFFB2', '#43618F']
+        var sql = new cartodb.SQL({ user: 'memaldi' });
+
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
-          //cartoDBLegends = vis.legends;
+          sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
+            .done(function(data) {
+              var max = data.rows[0].maxfecha;
+              updateLayer(max, "v_vien", 0);
+              updateLayer(max, "t_c2_ba", 1);
+              var datetime = $("#datetime-picker");
+              console.log(String(max));
+              console.log(String(max).replace('Z', ''));
+              datetime.attr('value', String(max).replace('Z', ''));
+            })
+            .error(function(errors) {
+              // errors contains a list of errors
+              console.log("errors:" + errors);
+          });
         });
 
         function updateLayer(date, table_name, sublayer_number) {
-          var sql = new cartodb.SQL({ user: 'memaldi' });
 
           sql.execute("SELECT MAX(valor), MIN(valor) FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)")
             .done(function(data) {
-
               var subLayerOptions = {
                 sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)"
                 //cartocss: cartoCSS
