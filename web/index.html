@@ -26,7 +26,6 @@
         <!-- Custom styles for this template -->
         <!--<link href="starter-template.css" rel="stylesheet">-->
         <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
-        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
         <title>EuskalSense</title>
     </head>
     </body>
@@ -54,36 +53,67 @@
         <div id="map"></div>
 
         <div id="date_selector" class="cartodb-infobox">
-          <form class="form-inline" role="form">
+          <div class="form-inline">
             <div class="form-group">
               <div class="input-group">
                 <input type="datetime-local" class="form-control" id="datetime-picker" style="width: 233px;">
               </div>
             </div>
-            <button type="submit" class="btn btn-default">Check</button>
-          </form>
-        </id>
+            <button type="submit" class="btn btn-default" onclick="updateDate()">Check</button>
+          </div>
+        </div>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
+        <script src="static/bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript">
 
-        var vientoSubLayerOptions = {
-            sql: "SELECT * FROM v_vien WHERE (fecha >= ('2014-11-20T06:00:00') AND fecha <= ('2014-11-20T06:00:00') AND valor IS NOT NULL)",
-            interactivity: 'cartodb_id'
-          }
+        var cartoDBLayer;
+        var cartoDBLegends;
 
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
-          layers[1].setInteraction(true);
-
-          layers[1].getSubLayer(0).set(vientoSubLayerOptions);
-
-          // you can get the native map to work with it
-          var map = vis.getNativeMap();
-
-          // now, perform any operations you need, e.g. assuming map is a L.Map object:
-          // map.setZoom(3);
-          // map.panTo([50.5, 30.5]);
+          cartoDBLayer = layers[1];
+          cartoDBLegends = vis.legends;
         });
+
+        function updateDate() {
+          var fecha = $("#datetime-picker")[0].value;
+
+
+          var temperaturaSubLayerOptions = {
+            sql: "SELECT * FROM t_c2_ba WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)"
+          }
+
+          var sql = new cartodb.SQL({ user: 'memaldi' });
+
+          //Viento
+          sql.execute("SELECT MAX(valor), MIN(valor) FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)")
+            .done(function(data) {
+              var min;
+              var max;
+              $.each(data['rows'], function(key, value) {
+                max = value['max'];
+                min = value['min'];
+              });
+
+              $("#legend-v_vien .min")[0].innerText = min;
+              $("#legend-v_vien .max")[0].innerText = max;
+
+              var vientoSubLayerOptions = {
+                sql: "SELECT * FROM v_vien WHERE (fecha >= ('" + fecha +  "') AND fecha <= ('" + fecha + "') AND valor IS NOT NULL)"
+              }
+              cartoDBLayer.getSubLayer(0).set(vientoSubLayerOptions);
+            })
+            .error(function(errors) {
+              // errors contains a list of errors
+              console.log("errors:" + errors);
+          });
+
+
+          cartoDBLayer.getSubLayer(1).set(temperaturaSubLayerOptions);
+
+        }
 
         </script>
 
