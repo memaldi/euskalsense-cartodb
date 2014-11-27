@@ -101,6 +101,8 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
+        var layerIndexArray = ['base', 'v_vien', 't_c2_ba'];
+        var unitsIndex = ['none', 'm/s', 'ºC'];
 
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
@@ -108,8 +110,8 @@
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
             .done(function(data) {
               var max = data.rows[0].maxfecha;
-              updateLayer(max, "v_vien", 0);
-              updateLayer(max, "t_c2_ba", 1);
+              updateLayer(max, "v_vien", 1);
+              updateLayer(max, "t_c2_ba", 2);
               var datetime = $("#datetime-picker");
               datetime.attr('value', String(max).replace('Z', ''));
             })
@@ -120,7 +122,7 @@
         });
 
 
-        function drawGraph(date) {
+        function drawChart(date, station_name, layerIndex) {
           // Remove graph
           d3.select("svg")
             .remove();
@@ -165,23 +167,22 @@
               .attr("id", "graph")
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-          console.log(date);
           bottom_limit = date.split('T')[0] + "T00:00:00";
           top_limit =  date.split('T')[0] + "T23:00:00";
-          sql.execute("SELECT fecha, valor FROM t_c2_ba WHERE (fecha >= ('" + bottom_limit +  "') AND fecha <= ('" + top_limit + "') AND nombre_estacion = 'ABANTO' AND valor IS NOT NULL) ORDER BY fecha ASC")
+          sql.execute("SELECT fecha, valor FROM " + layerIndexArray[layerIndex] +" WHERE (fecha >= ('" + bottom_limit +  "') AND fecha <= ('" + top_limit + "') AND nombre_estacion = '" + station_name + "' AND valor IS NOT NULL) ORDER BY fecha ASC")
               .done(function(data) {
-                var graphData = new Array()
+                var chartData = new Array()
                 var valueAccum = 0;
                 $.each(data['rows'], function(key, value) {
-                  graphDate = parseDate(value.fecha.replace('Z', ''));
+                  chartDate = parseDate(value.fecha.replace('Z', ''));
                   valueAccum =+ value.valor;
-                  graphData.push({'fecha': graphDate, 'valor': valueAccum});
+                  chartData.push({'fecha': chartDate, 'valor': valueAccum});
                 });
-                x.domain(d3.extent(graphData, function(d) { return d.fecha; }));
-                y.domain([0, d3.max(graphData, function(d) { return d.valor; }) + 2]);
+                x.domain(d3.extent(chartData, function(d) { return d.fecha; }));
+                y.domain([0, d3.max(chartData, function(d) { return d.valor; }) + 2]);
 
                 svg.append("path")
-                  .datum(graphData)
+                  .datum(chartData)
                   .attr("class", "area")
                   .attr("d", area);
 
@@ -194,13 +195,13 @@
                     .attr("class", "y axis")
                     .call(yAxis)
                   .append("text")
-                    .attr("transform", "rotate(-90)")
+                    //.attr("transform", "rotate(-90)")
                     .attr("y", 6)
-                    .attr("dy", ".71em")
+                    .attr("dy", "-10px")
                     .style("text-anchor", "end")
-                    .text("ºC");
+                    .text(unitsIndex[layerIndex]);
                 svg.append("path")
-                    .datum(graphData)
+                    .datum(chartData)
                     .attr("class", "line")
                     .attr("d", line);
               })
@@ -218,9 +219,21 @@
                 sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)"
                 //cartocss: cartoCSS
               }
-              cartoDBLayer.getSubLayer(sublayer_number).set(subLayerOptions);
-              // Parametrize station and layer
-              drawGraph(date);
+              cartoDBLayer.getSubLayer(sublayer_number)
+                          .set(subLayerOptions)
+                          .on('featureClick', function(event, latlng, pos, data, layerIndex) {
+                            console.log(event);
+                            sql.execute("SELECT fecha, nombre_estacion FROM " + layerIndexArray[layerIndex] + " WHERE cartodb_id = " + data.cartodb_id)
+                                .done(function(data) {
+                                  var fecha = data.rows[0].fecha;
+                                  var nombre_estacion = data.rows[0].nombre_estacion;
+                                  drawChart(fecha, nombre_estacion, layerIndex);
+                                })
+                                .error(function(errors) {
+                                  // errors contains a list of errors
+                                  console.log("errors:" + errors);
+                            });
+                          });
             })
             .error(function(errors) {
               // errors contains a list of errors
@@ -229,10 +242,14 @@
         }
 
         function updateDate() {
+          // Remove graph
+          d3.select("svg")
+            .remove();
+
           var date = $("#datetime-picker")[0].value;
 
-          updateLayer(date, "v_vien", 0);
-          updateLayer(date, "t_c2_ba", 1);
+          updateLayer(date, "v_vien", 1);
+          updateLayer(date, "t_c2_ba", 2);
         }
 
         </script>
