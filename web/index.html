@@ -51,6 +51,20 @@
             font-size: 15px;
             stroke: silver;
           }
+          div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            height: 28px;
+            padding: 2px;
+            font: 15px sans-serif;
+            /*background: red;*/
+            color: dimgray;
+            border: 8px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0.2;
+          }
         </style>
         <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom styles for this template -->
@@ -156,10 +170,13 @@
               .y0(height)
               .y1(function(d) { return y(d.valor); });
 
-
           var line = d3.svg.line()
               .x(function(d) { return x(d.fecha); })
               .y(function(d) { return y(d.valor); });
+
+          var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
           var svg = d3.select("body").append("svg")
               .attr("width", width + margin.left + margin.right)
@@ -167,6 +184,8 @@
               .attr("id", "graph")
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
           bottom_limit = date.split('T')[0] + "T00:00:00";
           top_limit =  date.split('T')[0] + "T23:00:00";
           sql.execute("SELECT fecha, valor FROM " + layerIndexArray[layerIndex] +" WHERE (fecha >= ('" + bottom_limit +  "') AND fecha <= ('" + top_limit + "') AND nombre_estacion = '" + station_name + "' AND valor IS NOT NULL) ORDER BY fecha ASC")
@@ -204,6 +223,27 @@
                     .datum(chartData)
                     .attr("class", "line")
                     .attr("d", line);
+
+                svg.selectAll("dot")
+                  .data(chartData)
+                  .enter()
+                  .append("circle")
+                  .attr("r", 3)
+                  .attr("cx", function(d) { return x(d.fecha); })
+                  .attr("cy", function(d) { return y(d.valor); })
+                  .on("mouseover", function(d) {
+                      div.transition()
+                          .duration(200)
+                          .style("opacity", 1);
+                      div .html(d.valor)
+                          .style("left", (d3.event.pageX - 28) + "px")
+                          .style("top", (d3.event.pageY - 28) + "px");
+                      })
+                  .on("mouseout", function(d) {
+                      div.transition()
+                          .duration(500)
+                          .style("opacity", 0);
+                  });
               })
               .error(function(errors) {
                 // errors contains a list of errors
