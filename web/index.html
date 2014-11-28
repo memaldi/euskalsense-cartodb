@@ -59,11 +59,14 @@
             padding: 2px;
             font: 15px sans-serif;
             /*background: red;*/
-            color: dimgray;
+            color: silver;
             border: 8px;
             border-radius: 8px;
             pointer-events: none;
             opacity: 0.2;
+          }
+          div.cartodb-popup.v2 a.cartodb-popup-close-button:after, div.cartodb-popup.v2 a.cartodb-popup-close-button:before {
+            background: red;
           }
         </style>
         <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -228,7 +231,10 @@
                   .data(chartData)
                   .enter()
                   .append("circle")
-                  .attr("r", 3)
+                  .attr("stroke", "dimgray")
+                  .attr("stroke-width", 2.5)
+                  .attr("fill", "black")
+                  .attr("r", 4)
                   .attr("cx", function(d) { return x(d.fecha); })
                   .attr("cy", function(d) { return y(d.valor); })
                   .on("mouseover", function(d) {
