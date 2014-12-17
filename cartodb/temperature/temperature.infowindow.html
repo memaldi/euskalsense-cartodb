@@ -1,0 +1,23 @@
+<style>
+div.cartodb-popup.v2 a.cartodb-popup-close-button:after, div.cartodb-popup.v2 a.cartodb-popup-close-button:before {
+ background: silver;
+
+  }
+</style>
+
+<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.8;">
+  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a>
+  <div class="cartodb-popup-content-wrapper" >
+    <div class="cartodb-popup-content">
+      <h4>Estación</h4>
+      <p style="color:black;">              {{nombre_estacion}}</p>
+      <p style="color:black;">{{direccion_estacion}}</p>
+      <p style="color:black;">{{localidad}}</p>
+      <h4>fecha</h4>
+      <p style="color:black;">{{fecha}}</p>
+      <h4>Viento</h4>
+      <p style="color:black;">{{valor}} ºC</p>
+    </div>
+  </div>
+  <div class="cartodb-popup-tip-container"></div>
+</div>
