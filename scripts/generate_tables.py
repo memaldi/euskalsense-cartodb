@@ -38,7 +38,7 @@ for file_name in os.listdir(DATA_DIR):
                 measurements[file_name.replace('.utf8.csv', '')][datetime] = date_dict
                 date_set.add(datetime)
             else:
-                sline = line.split(";")
+                sline = line.replace('\n', '').split(";")
                 for item in sline[2:]:
                     measured_items.append(item)
                     different_measurements.add(item)

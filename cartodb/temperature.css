@@ -1,0 +1,47 @@
+/** choropleth visualization */
+
+#t_c2_ba{
+  marker-fill-opacity: 0.8;
+  marker-line-color: #FFF;
+  marker-line-width: 1.5;
+  marker-line-opacity: 1;
+  marker-width: 10;
+  marker-fill: #FFFFB2;
+  marker-allow-overlap: true;
+}
+#t_c2_ba [ valor <= 40] {
+   marker-fill: #0079E5;
+}
+#t_c2_ba [ valor <= 35] {
+   marker-fill: #01C0E3;
+}
+#t_c2_ba [ valor <= 30] {
+   marker-fill: #03E2BE;
+}
+#t_c2_ba [ valor <= 25] {
+   marker-fill: #04E078;
+}
+#t_c2_ba [ valor <= 20] {
+   marker-fill: #06DF34;
+}
+#t_c2_ba [ valor <= 15] {
+   marker-fill: #1CDD07;
+}
+#t_c2_ba [ valor <= 10] {
+   marker-fill: #5FDC09;
+}
+#t_c2_ba [ valor <= 5] {
+   marker-fill: #A1DA0A;
+}
+#t_c2_ba [ valor <= 0] {
+   marker-fill: #D9D10B;
+}
+#t_c2_ba [ valor <= -5] {
+   marker-fill: #D7910D;
+}
+#t_c2_ba [ valor <= -10] {
+   marker-fill: #D6520E;
+}
+#t_c2_ba [ valor <= 15] {
+   marker-fill: #D51510;
+}

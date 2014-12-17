@@ -1,0 +1,1 @@
+SELECT * FROM t_c2_ba WHERE (fecha >= ('2014-11-15T07:00:00') AND fecha <= ('2014-11-15T07:00:00') AND valor IS NOT NULL)
