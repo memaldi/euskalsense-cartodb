@@ -108,6 +108,20 @@
             </div>
             <button type="submit" class="btn btn-default" onclick="updateDate()">Check</button>
           </div>
+          <form role="form">
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsTemperatura" value="t_c2_ba" checked onclick="onComponentSelect(value)">
+                Temperatura
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsBenceno" value="benceno" onclick="onComponentSelect(value)">
+                Benceno
+              </label>
+            </div>
+          </form>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -118,24 +132,121 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['v_vien', 't_c2_ba', 'benceno', 'ch4'];
-        var unitsIndex = ['m/s', 'ºC'];
+        var layerIndexArray = ['t_c2_ba', 'benceno'];
+        var unitsIndex = ['ºC'];
 
-        cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
+        var cartoCSS = {};
+        cartoCSS['t_c2_ba'] = " \
+        #t_c2_ba{ \
+          marker-fill-opacity: 0.8; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-width: 10; \
+          marker-fill: #FFFFB2; \
+          marker-allow-overlap: true; \
+        } \
+        #t_c2_ba [ valor <= 40] { \
+           marker-fill: #0079E5; \
+        } \
+        #t_c2_ba [ valor <= 35] { \
+           marker-fill: #01C0E3; \
+        } \
+        #t_c2_ba [ valor <= 30] { \
+           marker-fill: #03E2BE; \
+        } \
+        #t_c2_ba [ valor <= 25] { \
+           marker-fill: #04E078; \
+        } \
+        #t_c2_ba [ valor <= 20] { \
+           marker-fill: #06DF34; \
+        } \
+        #t_c2_ba [ valor <= 15] { \
+           marker-fill: #1CDD07; \
+        } \
+        #t_c2_ba [ valor <= 10] { \
+           marker-fill: #5FDC09; \
+        } \
+        #t_c2_ba [ valor <= 5] { \
+           marker-fill: #A1DA0A; \
+        } \
+        #t_c2_ba [ valor <= 0] { \
+           marker-fill: #D9D10B; \
+        } \
+        #t_c2_ba [ valor <= -5] { \
+           marker-fill: #D7910D; \
+        } \
+        #t_c2_ba [ valor <= -10] { \
+           marker-fill: #D6520E; \
+        } \
+        #t_c2_ba [ valor <= -15] { \
+           marker-fill: #D51510; \
+        }";
+
+        cartoCSS['benceno'] = " \
+        #benceno{ \
+          marker-fill-opacity: 0.8; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-width: 10; \
+          marker-fill: #229A00; \
+          marker-allow-overlap: true; \
+        } \
+        #benceno [ valor >= 5] { \
+           marker-fill: #d51510; \
+        }";
+
+        var cartoLegend = {};
+        cartoLegend['t_c2_ba'] = ' \
+        <ul> \
+          <li class="min"> \
+            -20 \
+          </li> \
+          <li class="max"> \
+            40 \
+          </li> \
+          <li class="graph count_441"> \
+          <div class="colors"> \
+          <div class="quartile" style="background-color:#0079E5"></div> \
+          <div class="quartile" style="background-color:#01C0E3"></div> \
+          <div class="quartile" style="background-color:#03E2BE"></div> \
+          <div class="quartile" style="background-color:#04E078"></div> \
+          <div class="quartile" style="background-color:#06DF34"></div> \
+          <div class="quartile" style="background-color:#1CDD07"></div> \
+          <div class="quartile" style="background-color:#5FDC09"></div> \
+            <div class="quartile" style="background-color:#A1DA0A"></div> \
+            <div class="quartile" style="background-color:#D9D10B"></div> \
+            <div class="quartile" style="background-color:#D7910D"></div> \
+            <div class="quartile" style="background-color:#D6520E"></div> \
+            <div class="quartile" style="background-color:#D51510"></div> \
+          </div> \
+          </li> \
+        </ul>';
+
+        cartoLegend['benceno'] = ' \
+        <ul> \
+          <li class="min"> \
+            0.0 \
+          </li> \
+          <li class="max"> \
+            &gt;5 \
+          </li> \
+          <li class="graph count_126"> \
+          <div class="colors"> \
+          <div class="quartile" style="background-color:#229a00"></div> \
+          <div class="quartile" style="background-color:#d51510"></div> \
+          </div> \
+          </li> \
+        </ul>';
+
+        cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/81488756-8605-11e4-82d1-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
             .done(function(data) {
               var max = data.rows[0].maxfecha;
-              for (i = 0; i < layerIndexArray.length; i++) {
-                    if (i == 0) {
-                      updateWindLayer(max, layerIndexArray[i], i);
-                    } else {
-                      updateLayer(max, layerIndexArray[i], i);
-                    }
-              }
-              //updateWindLayer(max, "v_vien", 0);
-              //updateLayer(max, "t_c2_ba", 1);
+              updateLayer(max, layerIndexArray[0], 0);
               var datetime = $("#datetime-picker");
               datetime.attr('value', String(max).replace('Z', ''));
             })
@@ -145,6 +256,11 @@
           });
         });
 
+        function onComponentSelect(value) {
+          console.log(value);
+          var date = $("#datetime-picker")[0].value;
+          updateLayer(date, value, 0)
+        }
 
         function drawChart(date, station_name, layerIndex) {
           // Remove graph
@@ -267,23 +383,25 @@
         function updateLayer(date, table_name, sublayer_number) {
 
           var subLayerOptions = {
-                sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)"
-                //cartocss: cartoCSS
+                sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)",
+                cartocss: cartoCSS[table_name]
               }
-              cartoDBLayer.getSubLayer(sublayer_number)
-                          .set(subLayerOptions)
-                          .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                            sql.execute("SELECT fecha, nombre_estacion FROM " + layerIndexArray[layerIndex] + " WHERE cartodb_id = " + data.cartodb_id)
-                                .done(function(data) {
-                                  var fecha = data.rows[0].fecha;
-                                  var nombre_estacion = data.rows[0].nombre_estacion;
-                                  drawChart(fecha, nombre_estacion, layerIndex);
-                                })
-                                .error(function(errors) {
-                                  // errors contains a list of errors
-                                  console.log("errors:" + errors);
-                            });
-                          });
+          cartoDBLayer.getSubLayer(sublayer_number)
+                      .set(subLayerOptions)
+                      .on('featureClick', function(event, latlng, pos, data, layerIndex) {
+                        sql.execute("SELECT fecha, nombre_estacion FROM " + layerIndexArray[layerIndex] + " WHERE cartodb_id = " + data.cartodb_id)
+                            .done(function(data) {
+                              var fecha = data.rows[0].fecha;
+                              var nombre_estacion = data.rows[0].nombre_estacion;
+                              drawChart(fecha, nombre_estacion, layerIndex);
+                            })
+                            .error(function(errors) {
+                              // errors contains a list of errors
+                              console.log("errors:" + errors);
+                        });
+                      });
+          var legend = $(".cartodb-legend.choropleth")[0];
+          legend.innerHTML = cartoLegend[table_name];
         }
 
         function updateWindLayer(date, table_name, sublayer_number) {
@@ -313,16 +431,7 @@
 
           var date = $("#datetime-picker")[0].value;
 
-          for (i = 0; i < layerIndexArray.length; i++) {
-            if (i == 0) {
-              updateWindLayer(date, layerIndexArray[i], i);
-            } else {
-              updateLayer(date, layerIndexArray[i], i);
-            }
-          }
-
-          //updateWindLayer(date, "v_vien", 0);
-          //updateLayer(date, "t_c2_ba", 1);
+          updateLayer(max, layerIndexArray[0], 0);
         }
 
         </script>
