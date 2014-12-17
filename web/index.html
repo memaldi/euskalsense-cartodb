@@ -118,7 +118,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['v_vien', 't_c2_ba'];
+        var layerIndexArray = ['v_vien', 't_c2_ba', 'benceno', 'ch4'];
         var unitsIndex = ['m/s', 'ºC'];
 
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/95288572-73f0-11e4-bcc3-0e018d66dc29/viz.json')
@@ -127,8 +127,15 @@
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
             .done(function(data) {
               var max = data.rows[0].maxfecha;
-              updateWindLayer(max, "v_vien", 0);
-              updateLayer(max, "t_c2_ba", 1);
+              for (i = 0; i < layerIndexArray.length; i++) {
+                    if (i == 0) {
+                      updateWindLayer(max, layerIndexArray[i], i);
+                    } else {
+                      updateLayer(max, layerIndexArray[i], i);
+                    }
+              }
+              //updateWindLayer(max, "v_vien", 0);
+              //updateLayer(max, "t_c2_ba", 1);
               var datetime = $("#datetime-picker");
               datetime.attr('value', String(max).replace('Z', ''));
             })
@@ -306,8 +313,16 @@
 
           var date = $("#datetime-picker")[0].value;
 
-          updateWindLayer(date, "v_vien", 0);
-          updateLayer(date, "t_c2_ba", 1);
+          for (i = 0; i < layerIndexArray.length; i++) {
+            if (i == 0) {
+              updateWindLayer(date, layerIndexArray[i], i);
+            } else {
+              updateLayer(date, layerIndexArray[i], i);
+            }
+          }
+
+          //updateWindLayer(date, "v_vien", 0);
+          //updateLayer(date, "t_c2_ba", 1);
         }
 
         </script>
