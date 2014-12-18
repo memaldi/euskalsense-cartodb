@@ -121,6 +121,24 @@
                 Benceno
               </label>
             </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsViento" value="viento" onclick="onComponentSelect(value)">
+                Viento
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsCH4" value="ch4" onclick="onComponentSelect(value)">
+                CH4
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsCO" value="co" onclick="onComponentSelect(value)">
+                CO
+              </label>
+            </div>
           </form>
         </div>
 
@@ -132,7 +150,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['t_c2_ba', 'benceno'];
+        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co'];
         var unitsIndex = ['ºC'];
 
         var cartoCSS = {};
@@ -197,6 +215,82 @@
            marker-fill: #d51510; \
         }";
 
+        cartoCSS['viento'] = " \
+        #v_vien{ \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/0kt.svg); \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #c0c0c0; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-allow-overlap: true; \
+          marker-transform: rotate([dir], 0, 0); \
+        } \
+        #v_vien [fuerza >= 2.57] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/5kt.svg); \
+        } \
+        #v_vien [fuerza >= 5.14] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/10kt.svg); \
+        } \
+        #v_vien [fuerza >= 7.71] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/15kt.svg); \
+        } \
+        #v_vien [fuerza >= 10.28] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/20kt.svg); \
+        } \
+        #v_vien [fuerza >= 15.43] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/30kt.svg); \
+        } \
+        #v_vien [fuerza >= 20.57] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/40kt.svg); \
+        } \
+        #v_vien [fuerza >= 25.72] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/50kt.svg); \
+        } \
+        #v_vien [fuerza >= 38.58] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/75kt.svg); \
+        } \
+        #v_vien [fuerza >= 51.44] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/100kt.svg); \
+        } \
+        #v_vien [fuerza >= 64.30] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/125kt.svg); \
+        } \
+        #v_vien [fuerza >= 77.16] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/150kt.svg); \
+        } \
+        #v_vien [fuerza >= 90.02] { \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/175kt.svg); \
+        }";
+
+        cartoCSS['ch4'] = ' \
+        #ch4{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
+        cartoCSS['CO'] = ' \
+        #ch4{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
         var cartoLegend = {};
         cartoLegend['t_c2_ba'] = ' \
         <ul> \
@@ -240,6 +334,86 @@
           </li> \
         </ul>';
 
+        cartoLegend['viento'] = '';
+
+        cartoLegend['ch4'] = '';
+
+        cartoLegend['co'] = '';
+
+        var cartoPopup = {};
+        cartoPopup['t_c2_ba'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>Temperatura</h4> \
+              <p style="color:black;">{{valor}} ºC</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['benceno'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>benceno</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['ch4'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>CH4</h4> \
+              <p style="color:black;">{{valor}} mg/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['co'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>CO</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/81488756-8605-11e4-82d1-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
@@ -259,7 +433,11 @@
         function onComponentSelect(value) {
           console.log(value);
           var date = $("#datetime-picker")[0].value;
-          updateLayer(date, value, 0)
+          if (value != 'viento') {
+            updateLayer(date, value, 0);
+          } else {
+            updateWindLayer(date, 0);
+          }
         }
 
         function drawChart(date, station_name, layerIndex) {
@@ -399,19 +577,20 @@
                               // errors contains a list of errors
                               console.log("errors:" + errors);
                         });
-                      });
+                      }).infowindow.set('template', cartoPopup[table_name]);
           var legend = $(".cartodb-legend.choropleth")[0];
           legend.innerHTML = cartoLegend[table_name];
         }
 
-        function updateWindLayer(date, table_name, sublayer_number) {
+        function updateWindLayer(date, sublayer_number) {
           var subLayerOptions = {
-                sql: "SELECT v_vien.fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad, v_vien.direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)"
+                sql: "SELECT v_vien.fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad, v_vien.direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)",
+                cartocss: cartoCSS['viento']
               }
           cartoDBLayer.getSubLayer(sublayer_number)
                       .set(subLayerOptions)
                       .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                        sql.execute("SELECT fecha, nombre_estacion FROM " + layerIndexArray[layerIndex] + " WHERE cartodb_id = " + data.cartodb_id)
+                        sql.execute("SELECT fecha, nombre_estacion FROM v_vien WHERE cartodb_id = " + data.cartodb_id)
                             .done(function(data) {
                               var fecha = data.rows[0].fecha;
                               var nombre_estacion = data.rows[0].nombre_estacion;
@@ -422,6 +601,8 @@
                               console.log("errors:" + errors);
                         });
                       });
+          var legend = $(".cartodb-legend.choropleth")[0];
+          legend.innerHTML = cartoLegend['viento'];
         }
 
         function updateDate() {
@@ -430,8 +611,12 @@
             .remove();
 
           var date = $("#datetime-picker")[0].value;
-
-          updateLayer(max, layerIndexArray[0], 0);
+          var windRadioButton = $("#optionsViento")[0];
+          if (windRadioButton.checked) {
+            updateWindLayer(date, 0);
+          } else {
+            updateLayer(date, layerIndexArray[0], 0);
+          }
         }
 
         </script>
