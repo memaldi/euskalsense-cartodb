@@ -159,7 +159,7 @@
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="optionsRadios" id="optionsMPXileno" value="mpxileno" onclick="onComponentSelect(value)">
+                <input type="radio" name="optionsRadios" id="optionsm_p_xileno" value="m_p_xileno" onclick="onComponentSelect(value)">
                 M-P-Xileno
               </label>
             </div>
@@ -174,7 +174,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'mpxileno'];
+        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'm_p_xileno'];
         var unitsIndex = ['ºC'];
 
         var cartoCSS = {};
@@ -381,8 +381,8 @@
           marker-allow-overlap: true; \
         }';
 
-        cartoCSS['mpxileno'] = ' \
-        #mpxileno{ \
+        cartoCSS['m_p_xileno'] = ' \
+        #m_p_xileno{ \
           marker-fill-opacity: 0.9; \
           marker-line-color: #FFF; \
           marker-line-width: 1.5; \
@@ -471,7 +471,7 @@
 
         cartoLegend['hcnm'] = '';
 
-        cartoLegend['mpxileno'] = '';
+        cartoLegend['m_p_xileno'] = '';
 
         var cartoPopup = {};
         cartoPopup['t_c2_ba'] = ' \
@@ -600,7 +600,7 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
-        cartoPopup['mpxileno'] = ' \
+        cartoPopup['m_p_xileno'] = ' \
         <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
           <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
           <div class="cartodb-popup-content-wrapper" > \
@@ -618,7 +618,7 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
-        cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/81488756-8605-11e4-82d1-0e018d66dc29/viz.json')
+        cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/40bbb0d4-878e-11e4-a0fd-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
@@ -811,8 +811,8 @@
 
         function updateDate() {
           // Remove graph
-          d3.select("svg")
-            .remove();
+          //d3.select("svg")
+          //  .remove();
 
           var date = $("#datetime-picker")[0].value;
           var windRadioButton = $("#optionsViento")[0];
