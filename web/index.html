@@ -732,7 +732,7 @@
           cartoDBLayer.getSubLayer(sublayer_number)
                       .set(subLayerOptions)
                       .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                        sql.execute("SELECT fecha, nombre_estacion FROM " + layerIndexArray[layerIndex] + " WHERE cartodb_id = " + data.cartodb_id)
+                        sql.execute("SELECT fecha, nombre_estacion FROM " + table_name + " WHERE cartodb_id = " + data.cartodb_id)
                             .done(function(data) {
                               var fecha = data.rows[0].fecha;
                               var nombre_estacion = data.rows[0].nombre_estacion;
@@ -780,7 +780,14 @@
           if (windRadioButton.checked) {
             updateWindLayer(date, 0);
           } else {
-            updateLayer(date, layerIndexArray[0], 0);
+            var radioButtons = $("input[name='optionsRadios']");
+            $.each(radioButtons, function (index, item) {
+              if (item.checked) {
+                updateLayer(date, item.value, 0);
+                return false;
+              }
+            });
+
           }
         }
 
