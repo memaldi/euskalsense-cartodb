@@ -130,7 +130,7 @@
             <div class="radio">
               <label>
                 <input type="radio" name="optionsRadios" id="optionsCH4" value="ch4" onclick="onComponentSelect(value)">
-                CH4
+                CH<sub>4</sub>
               </label>
             </div>
             <div class="radio">
@@ -166,7 +166,25 @@
             <div class="radio">
               <label>
                 <input type="radio" name="optionsRadios" id="optionsNH3" value="nh3" onclick="onComponentSelect(value)">
-                NH3
+                NH<sub>3</sub>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsNO" value="no" onclick="onComponentSelect(value)">
+                NO
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsNO2" value="no2" onclick="onComponentSelect(value)">
+                NO<sub>2</sub>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsNOX" value="nox" onclick="onComponentSelect(value)">
+                NOx
               </label>
             </div>
           </form>
@@ -180,7 +198,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'm_p_xileno', 'nh3'];
+        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'm_p_xileno', 'nh3', 'no', 'no2', 'nox'];
         var unitsIndex = ['ºC'];
 
         var cartoCSS = {};
@@ -413,6 +431,102 @@
           marker-allow-overlap: true; \
         }';
 
+        cartoCSS['no'] = ' \
+        #no{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
+        cartoCSS['no2'] = ' \
+        #no2{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FF0000; \
+          marker-allow-overlap: true; \
+        } \
+        #no2 [ valor <= 190] { \
+           marker-fill: #FF0D0D; \
+        } \
+        #no2 [ valor <= 180] { \
+           marker-fill: #FF1A1A; \
+        } \
+        #no2 [ valor <= 170] { \
+           marker-fill: #FF2828; \
+        } \
+        #no2 [ valor <= 160] { \
+           marker-fill: #FF3535; \
+        } \
+        #no2 [ valor <= 150] { \
+           marker-fill: #FF4343; \
+        } \
+        #no2 [ valor <= 140] { \
+           marker-fill: #FF5050; \
+        } \
+        #no2 [ valor <= 130] { \
+           marker-fill: #FF5D5D; \
+        } \
+        #no2 [ valor <= 120] { \
+           marker-fill: #FF6B6B; \
+        } \
+        #no2 [ valor <= 110] { \
+           marker-fill: #FF7878; \
+        } \
+        #no2 [ valor <= 100] { \
+           marker-fill: #FF8686; \
+        } \
+        #no2 [ valor <= 90] { \
+           marker-fill: #FF9393; \
+        } \
+        #no2 [ valor <= 80] { \
+           marker-fill: #FFA1A1; \
+        } \
+        #no2 [ valor <= 70] { \
+           marker-fill: #FFAEAE; \
+        } \
+        #no2 [ valor <= 60] { \
+           marker-fill: #FFBBBB; \
+        } \
+        #no2 [ valor <= 50] { \
+           marker-fill: #FFC9C9; \
+        } \
+        #no2 [ valor <= 40] { \
+           marker-fill: #FFD6D6; \
+        } \
+        #no2 [ valor <= 30] { \
+           marker-fill: #FFE4E4; \
+        } \
+        #no2 [ valor <= 20] { \
+           marker-fill: #FFF1F1; \
+        } \
+        #no2 [ valor <= 10] { \
+           marker-fill: #FFFFFF; \
+        }';
+
+        cartoCSS['nox'] = ' \
+        #no{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
         var cartoLegend = {};
         cartoLegend['t_c2_ba'] = ' \
         <ul> \
@@ -494,6 +608,44 @@
 
         cartoLegend['nh3'] = '';
 
+        cartoLegend['no'] = '';
+
+        cartoLegend['no2'] = ' \
+        <ul> \
+          <li class="min"> \
+            0 \
+          </li> \
+          <li class="max"> \
+            200 \
+          </li> \
+          <li class="graph count_441"> \
+          <div class="colors"> \
+            <div class="quartile" style="background-color:#FFFFFF"></div> \
+            <div class="quartile" style="background-color:#FFF1F1"></div> \
+            <div class="quartile" style="background-color:#FFE4E4"></div> \
+            <div class="quartile" style="background-color:#FFD6D6"></div> \
+            <div class="quartile" style="background-color:#FFC9C9"></div> \
+            <div class="quartile" style="background-color:#FFBBBB"></div> \
+            <div class="quartile" style="background-color:#FFAEAE"></div> \
+            <div class="quartile" style="background-color:#FFA1A1"></div> \
+            <div class="quartile" style="background-color:#FF9393"></div> \
+            <div class="quartile" style="background-color:#FF8686"></div> \
+            <div class="quartile" style="background-color:#FF7878"></div> \
+            <div class="quartile" style="background-color:#FF6B6B"></div> \
+            <div class="quartile" style="background-color:#FF5D5D"></div> \
+            <div class="quartile" style="background-color:#FF5050"></div> \
+            <div class="quartile" style="background-color:#FF4343"></div> \
+            <div class="quartile" style="background-color:#FF3535"></div> \
+            <div class="quartile" style="background-color:#FF2828"></div> \
+            <div class="quartile" style="background-color:#FF1A1A"></div> \
+            <div class="quartile" style="background-color:#FF0D0D"></div> \
+            <div class="quartile" style="background-color:#FF0000"></div> \
+          </div> \
+          </li> \
+        </ul>';
+
+        cartoLegend['nox'] = '';
+
         var cartoPopup = {};
         cartoPopup['t_c2_ba'] = ' \
         <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
@@ -501,7 +653,7 @@
           <div class="cartodb-popup-content-wrapper" > \
             <div class="cartodb-popup-content"> \
               <h4>Estación</h4> \
-              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{nombre_estacion}}</p> \
               <p style="color:black;">{{direccion_estacion}}</p> \
               <p style="color:black;">{{localidad}}</p> \
               <h4>fecha</h4> \
@@ -651,6 +803,60 @@
               <h4>fecha</h4> \
               <p style="color:black;">{{fecha}}</p> \
               <h4>NH3</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['no'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>NO</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['no2'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>NO2</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['nox'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>NOx</h4> \
               <p style="color:black;">{{valor}} &#181;g/m3</p> \
             </div> \
           </div> \
