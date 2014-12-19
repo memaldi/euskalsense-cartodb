@@ -157,6 +157,12 @@
                 HCNM
               </label>
             </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsMPXileno" value="mpxileno" onclick="onComponentSelect(value)">
+                M-P-Xileno
+              </label>
+            </div>
           </form>
         </div>
 
@@ -168,7 +174,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm'];
+        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'mpxileno'];
         var unitsIndex = ['ºC'];
 
         var cartoCSS = {};
@@ -375,6 +381,19 @@
           marker-allow-overlap: true; \
         }';
 
+        cartoCSS['mpxileno'] = ' \
+        #mpxileno{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
         var cartoLegend = {};
         cartoLegend['t_c2_ba'] = ' \
         <ul> \
@@ -451,6 +470,8 @@
         </ul>';
 
         cartoLegend['hcnm'] = '';
+
+        cartoLegend['mpxileno'] = '';
 
         var cartoPopup = {};
         cartoPopup['t_c2_ba'] = ' \
@@ -574,6 +595,24 @@
               <p style="color:black;">{{fecha}}</p> \
               <h4>CO</h4> \
               <p style="color:black;">{{valor}} mg/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['mpxileno'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>CO</h4> \
+              <p style="color:black;">{{valor}} &#181;gg/m3</p> \
             </div> \
           </div> \
           <div class="cartodb-popup-tip-container"></div> \
