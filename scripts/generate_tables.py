@@ -62,26 +62,5 @@ for measurement in different_measurements:
                 if date in measurements[key]:
                     if measurement in measurements[key][date]:
                         line += ';%s' % measurements[key][date][measurement]
-                    else:
-                        line += ';-'
-                line += '\n'
-                #print (line)
-                output_file.write(line)
-        # header = 'datetime'
-        # for key in measurements:
-        #     header += ';%s' % key
-        # header += '\n'
-        # output_file.write(header)
-
-        # for date in date_set:
-        #     line = date
-        #     for key in measurements:
-        #         if date in measurements[key]:
-        #             if measurement in measurements[key][date]:
-        #                 line += ';%s' % measurements[key][date][measurement]
-        #             else:
-        #                 line += ';-'
-        #         else:
-        #             line += ';-'
-        #     line += '\n'
-        #     output_file.write(line)
+                        line += '\n'
+                        output_file.write(line)
