@@ -139,6 +139,18 @@
                 CO
               </label>
             </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsEtilbenceno" value="etilbenceno" onclick="onComponentSelect(value)">
+                Etilbenceno
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="optionsRadios" id="optionsH" value="h" onclick="onComponentSelect(value)">
+                H
+              </label>
+            </div>
           </form>
         </div>
 
@@ -150,7 +162,7 @@
 
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
-        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co'];
+        var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h'];
         var unitsIndex = ['ºC'];
 
         var cartoCSS = {};
@@ -279,7 +291,7 @@
         }';
 
         cartoCSS['co'] = ' \
-        #ch4{ \
+        #co{ \
           marker-fill-opacity: 0.9; \
           marker-line-color: #FFF; \
           marker-line-width: 1.5; \
@@ -289,6 +301,59 @@
           marker-width: 10; \
           marker-fill: #FFFFFF; \
           marker-allow-overlap: true; \
+        }';
+
+        cartoCSS['etilbenceno'] = ' \
+        #etilbenceno{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FFFFFF; \
+          marker-allow-overlap: true; \
+        }';
+
+        cartoCSS['h'] = ' \
+        #h{ \
+          marker-fill-opacity: 0.9; \
+          marker-line-color: #FFF; \
+          marker-line-width: 1.5; \
+          marker-line-opacity: 1; \
+          marker-placement: point; \
+          marker-type: ellipse; \
+          marker-width: 10; \
+          marker-fill: #FF0000; \
+          marker-allow-overlap: true; \
+        } \
+        #h [ valor <= 90] { \
+           marker-fill: #FF1C1C; \
+        } \
+        #h [ valor <= 80] { \
+           marker-fill: #FF3838; \
+        } \
+        #h [ valor <= 70] { \
+           marker-fill: #FF5555; \
+        } \
+        #h [ valor <= 60] { \
+           marker-fill: #FF7171; \
+        } \
+        #h [ valor <= 50] { \
+           marker-fill: #FF8D8D; \
+        } \
+        #h [ valor <= 40] { \
+           marker-fill: #FFAAAA; \
+        } \
+        #h [ valor <= 30] { \
+           marker-fill: #FFC6C6; \
+        } \
+        #h [ valor <= 20] { \
+           marker-fill: #FFE2E2; \
+        } \
+        #h [ valor <= 10] { \
+           marker-fill: #FFFFFF; \
         }';
 
         var cartoLegend = {};
@@ -339,6 +404,32 @@
         cartoLegend['ch4'] = '';
 
         cartoLegend['co'] = '';
+
+        cartoLegend['etilbenceno'] = '';
+
+        cartoLegend['h'] = ' \
+        <ul> \
+          <li class="min"> \
+            0 \
+          </li> \
+          <li class="max"> \
+            100 % \
+          </li> \
+          <li class="graph count_441"> \
+          <div class="colors"> \
+          <div class="quartile" style="background-color:#FFFFFF"></div> \
+          <div class="quartile" style="background-color:#FFE2E2"></div> \
+          <div class="quartile" style="background-color:#FFC6C6"></div> \
+          <div class="quartile" style="background-color:#FFAAAA"></div> \
+          <div class="quartile" style="background-color:#FF8D8D"></div> \
+          <div class="quartile" style="background-color:#FF7171"></div> \
+          <div class="quartile" style="background-color:#FF5555"></div> \
+            <div class="quartile" style="background-color:#FF3838"></div> \
+            <div class="quartile" style="background-color:#FF1C1C"></div> \
+            <div class="quartile" style="background-color:#FF0000"></div> \
+          </div> \
+          </li> \
+        </ul>';
 
         var cartoPopup = {};
         cartoPopup['t_c2_ba'] = ' \
@@ -413,6 +504,41 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
+        cartoPopup['etilbenceno'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>CO</h4> \
+              <p style="color:black;">{{valor}} &#181;g/m3</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['h'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
+              <p style="color:black;">        {{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>CO</h4> \
+              <p style="color:black;">{{valor}} %</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
 
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/81488756-8605-11e4-82d1-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
