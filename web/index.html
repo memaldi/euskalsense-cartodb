@@ -630,6 +630,7 @@
 
         cartoCSS['precipitacion'] = ' \
         #precipitacion{ \
+          marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/rain.svg); \
           marker-fill-opacity: 0.9; \
           marker-line-color: #FFF; \
           marker-line-width: 1.5; \
@@ -639,6 +640,24 @@
           marker-width: 10; \
           marker-fill: #FFFFFF; \
           marker-allow-overlap: true; \
+        } \
+        #precipitacion [ valor > 0] { \
+           marker-fill: #48DAF4; \
+        } \
+        #precipitacion [ valor > 0.2] { \
+           marker-fill: #6AB3CB; \
+        } \
+        #precipitacion [ valor > 1] { \
+           marker-fill: #8C8DA2; \
+        } \
+        #precipitacion [ valor > 2] { \
+           marker-fill: #AF6679; \
+        } \
+        #precipitacion [ valor > 5] { \
+           marker-fill: #D14050; \
+        } \
+        #precipitacion [ valor > 10] { \
+           marker-fill: #F41A27; \
         }';
 
         var cartoLegend = {};
@@ -770,7 +789,25 @@
 
         cartoLegend['pm10'] = '';
 
-        cartoLegend['precipitacion'] = '';
+        cartoLegend['precipitacion'] = '<ul> \
+          <li class="min"> \
+            0 \
+          </li> \
+          <li class="max"> \
+            > 20 l/m2 \
+          </li> \
+          <li class="graph count_441"> \
+          <div class="colors"> \
+          <div class="quartile" style="background-color:#FFFFFF"></div> \
+          <div class="quartile" style="background-color:#48DAF4"></div> \
+          <div class="quartile" style="background-color:#6AB3CB"></div> \
+          <div class="quartile" style="background-color:#8C8DA2"></div> \
+          <div class="quartile" style="background-color:#AF6679"></div> \
+          <div class="quartile" style="background-color:#D14050"></div> \
+          <div class="quartile" style="background-color:#F41A27"></div> \
+          </div> \
+          </li> \
+        </ul>';
 
         var cartoPopup = {};
         cartoPopup['t_c2_ba'] = ' \
