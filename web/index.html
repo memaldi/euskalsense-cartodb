@@ -265,7 +265,31 @@
         var cartoDBLayer;
         var sql = new cartodb.SQL({ user: 'memaldi' });
         var layerIndexArray = ['t_c2_ba', 'benceno', 'viento', 'ch4', 'co', 'h', 'hcnm', 'm_p_xileno', 'nh3', 'no', 'no2', 'nox', 'o3', 'ortoxileno', 'p', 'pm2_2c5', 'pm10', 'precipitacion', 'r', 'r_uva', 'sh2', 'so2', 'tolueno'];
-        var unitsIndex = ['ºC'];
+
+        var unitsIndex = {}
+        unitsIndex['t_c2_ba'] = 'ºC';
+        unitsIndex['benceno'] = '&#181;g/m3';
+        unitsIndex['viento'] = 'm/s';
+        unitsIndex['ch4'] = 'mg/m3';
+        unitsIndex['co'] = 'mg/m3';
+        unitsIndex['h'] = '%';
+        unitsIndex['hcnm'] = 'mg/m3';
+        unitsIndex['m_p_xileno'] = '&#181;g/m3';
+        unitsIndex['nh3'] = '&#181;g/m3';
+        unitsIndex['no'] = '&#181;g/m3';
+        unitsIndex['no2'] = '&#181;g/m3';
+        unitsIndex['nox'] = '&#181;g/m3';
+        unitsIndex['o3'] = '&#181;g/m3';
+        unitsIndex['ortoxileno'] = '&#181;g/m3';
+        unitsIndex['p'] = 'mBar';
+        unitsIndex['pm2_2c5'] = '&#181;g/m3';
+        unitsIndex['pm10'] = '&#181;g/m3';
+        unitsIndex['precipitacion'] = 'l/m2';
+        unitsIndex['r'] = 'w/m2';
+        unitsIndex['r_uva'] = 'w/m2';
+        unitsIndex['sh2'] = '&#181;g/m3';
+        unitsIndex['so2'] = '&#181;g/m3';
+        unitsIndex['tolueno'] = '&#181;g/m3';
 
         var cartoCSS = {};
         cartoCSS['t_c2_ba'] = " \
@@ -910,6 +934,8 @@
 
         cartoLegend['sh2'] = '';
 
+        cartoLegend['so2'] = '';
+
         cartoLegend['tolueno'] = '';
 
         var cartoPopup = {};
@@ -926,6 +952,17 @@
               <p style="color:black;">{{fecha}}</p> \
               <h4>Temperatura</h4> \
               <p style="color:black;">{{valor}} ºC</p> \
+            </div> \
+          </div> \
+          <div class="cartodb-popup-tip-container"></div> \
+        </div>';
+
+        cartoPopup['viento'] = ' \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+          <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+          <div class="cartodb-popup-content-wrapper" > \
+            <div class="cartodb-popup-content"> \
+              <h4>Estación</h4> \
             </div> \
           </div> \
           <div class="cartodb-popup-tip-container"></div> \
@@ -1358,6 +1395,16 @@
           d3.select("svg")
             .remove();
 
+          var units;
+
+          var radioButtons = $("input[name='optionsRadios']");
+
+          $.each(radioButtons, function (index, item) {
+              if (item.checked) {
+                units = unitsIndex[item.value];
+              }
+            });
+
           // D3JS graph
           var margin = {top: 20, right: 20, bottom: 30, left: 50},
           width = 350 - margin.left - margin.right,
@@ -1435,7 +1482,7 @@
                     .attr("y", 6)
                     .attr("dy", "-10px")
                     .style("text-anchor", "end")
-                    .text(unitsIndex[layerIndex]);
+                    .text(units);
                 svg.append("path")
                     .datum(chartData)
                     .attr("class", "line")
@@ -1497,7 +1544,7 @@
 
         function updateWindLayer(date, sublayer_number) {
           var subLayerOptions = {
-                sql: "SELECT v_vien.fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad, v_vien.direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)",
+                sql: "SELECT v_vien.fecha as fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion as nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad as localidad, v_vien.direccion_estacion as direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)",
                 cartocss: cartoCSS['viento']
               }
           cartoDBLayer.getSubLayer(sublayer_number)
@@ -1513,7 +1560,7 @@
                               // errors contains a list of errors
                               console.log("errors:" + errors);
                         });
-                      });
+                      }).infowindow.set('template', cartoPopup['viento']);
           var legend = $(".cartodb-legend.choropleth")[0];
           legend.innerHTML = cartoLegend['viento'];
         }
