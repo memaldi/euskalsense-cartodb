@@ -1364,16 +1364,39 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
+
+        var currentTableName = 't_c2_ba';
+
+
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/40bbb0d4-878e-11e4-a0fd-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
             .done(function(data) {
               var max = data.rows[0].maxfecha;
-              updateLayer(max, layerIndexArray[0], 0);
+              //updateLayer(max, layerIndexArray[0], 0);
               var datetime = $("#datetime-picker");
               datetime.attr('value', String(max).replace('Z', ''));
-            })
+
+              var subLayerOptions = {
+                sql: "SELECT * FROM " + currentTableName + " WHERE (fecha >= ('" + max +  "') AND fecha <= ('" + max + "') AND valor IS NOT NULL)",
+                cartocss: cartoCSS[currentTableName]
+              }
+              cartoDBLayer.getSubLayer(0)
+                          .set(subLayerOptions)
+                          .on('featureClick', function(event, latlng, pos, data, layerIndex) {
+                            sql.execute("SELECT fecha, nombre_estacion FROM " + currentTableName + " WHERE cartodb_id = " + data.cartodb_id)
+                                .done(function(data) {
+                                  var fecha = data.rows[0].fecha;
+                                  var nombre_estacion = data.rows[0].nombre_estacion;
+                                  drawChart(fecha, nombre_estacion, layerIndex);
+                                })
+                                .error(function(errors) {
+                                  // errors contains a list of errors
+                                  console.log("errors:" + errors);
+                            });
+                          });
+                })
             .error(function(errors) {
               // errors contains a list of errors
               console.log("errors:" + errors);
@@ -1520,24 +1543,15 @@
 
         function updateLayer(date, table_name, sublayer_number) {
 
+          currentTableName = table_name;
+
           var subLayerOptions = {
                 sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)",
                 cartocss: cartoCSS[table_name]
               }
           cartoDBLayer.getSubLayer(sublayer_number)
                       .set(subLayerOptions)
-                      .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                        sql.execute("SELECT fecha, nombre_estacion FROM " + table_name + " WHERE cartodb_id = " + data.cartodb_id)
-                            .done(function(data) {
-                              var fecha = data.rows[0].fecha;
-                              var nombre_estacion = data.rows[0].nombre_estacion;
-                              drawChart(fecha, nombre_estacion, layerIndex);
-                            })
-                            .error(function(errors) {
-                              // errors contains a list of errors
-                              console.log("errors:" + errors);
-                        });
-                      }).infowindow.set('template', cartoPopup[table_name]);
+                      .infowindow.set('template', cartoPopup[table_name]);
           var legend = $(".cartodb-legend.choropleth")[0];
           legend.innerHTML = cartoLegend[table_name];
         }
