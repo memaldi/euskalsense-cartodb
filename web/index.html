@@ -963,6 +963,13 @@
           <div class="cartodb-popup-content-wrapper" > \
             <div class="cartodb-popup-content"> \
               <h4>Estación</h4> \
+              <p style="color:black;">{{nombre_estacion}}</p> \
+              <p style="color:black;">{{direccion_estacion}}</p> \
+              <p style="color:black;">{{localidad}}</p> \
+              <h4>fecha</h4> \
+              <p style="color:black;">{{fecha}}</p> \
+              <h4>Viento</h4> \
+              <p style="color:black;">{{fuerza}} ºC</p> \
             </div> \
           </div> \
           <div class="cartodb-popup-tip-container"></div> \
@@ -1385,7 +1392,15 @@
               cartoDBLayer.getSubLayer(0)
                           .set(subLayerOptions)
                           .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                            sql.execute("SELECT fecha, nombre_estacion FROM " + currentTableName + " WHERE cartodb_id = " + data.cartodb_id)
+
+                            var popupSQL;
+                            if (currentTableName == 'viento') {
+                              popupSQL = "SELECT fecha, nombre_estacion FROM v_vien WHERE cartodb_id = " + data.cartodb_id;
+                            } else {
+                              popupSQL = "SELECT fecha, nombre_estacion FROM " + currentTableName + " WHERE cartodb_id = " + data.cartodb_id;
+                            }
+
+                            sql.execute(popupSQL)
                                 .done(function(data) {
                                   var fecha = data.rows[0].fecha;
                                   var nombre_estacion = data.rows[0].nombre_estacion;
@@ -1406,11 +1421,7 @@
         function onComponentSelect(value) {
           console.log(value);
           var date = $("#datetime-picker")[0].value;
-          if (value != 'viento') {
-            updateLayer(date, value, 0);
-          } else {
-            updateWindLayer(date, 0);
-          }
+          updateLayer(date, value, 0);
         }
 
         function drawChart(date, station_name, layerIndex) {
@@ -1545,8 +1556,16 @@
 
           currentTableName = table_name;
 
+          var layoutSQL;
+
+          if (table_name != 'viento') {
+            layoutSQL = "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)";
+          } else {
+            layoutSQL = "SELECT v_vien.fecha as fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion as nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad as localidad, v_vien.direccion_estacion as direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)";
+          }
+
           var subLayerOptions = {
-                sql: "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)",
+                sql: layoutSQL,
                 cartocss: cartoCSS[table_name]
               }
           cartoDBLayer.getSubLayer(sublayer_number)
@@ -1556,48 +1575,21 @@
           legend.innerHTML = cartoLegend[table_name];
         }
 
-        function updateWindLayer(date, sublayer_number) {
-          var subLayerOptions = {
-                sql: "SELECT v_vien.fecha as fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion as nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad as localidad, v_vien.direccion_estacion as direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)",
-                cartocss: cartoCSS['viento']
-              }
-          cartoDBLayer.getSubLayer(sublayer_number)
-                      .set(subLayerOptions)
-                      .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-                        sql.execute("SELECT fecha, nombre_estacion FROM v_vien WHERE cartodb_id = " + data.cartodb_id)
-                            .done(function(data) {
-                              var fecha = data.rows[0].fecha;
-                              var nombre_estacion = data.rows[0].nombre_estacion;
-                              drawChart(fecha, nombre_estacion, layerIndex);
-                            })
-                            .error(function(errors) {
-                              // errors contains a list of errors
-                              console.log("errors:" + errors);
-                        });
-                      }).infowindow.set('template', cartoPopup['viento']);
-          var legend = $(".cartodb-legend.choropleth")[0];
-          legend.innerHTML = cartoLegend['viento'];
-        }
-
         function updateDate() {
           // Remove graph
           //d3.select("svg")
           //  .remove();
 
           var date = $("#datetime-picker")[0].value;
-          var windRadioButton = $("#optionsViento")[0];
-          if (windRadioButton.checked) {
-            updateWindLayer(date, 0);
-          } else {
-            var radioButtons = $("input[name='optionsRadios']");
-            $.each(radioButtons, function (index, item) {
-              if (item.checked) {
-                updateLayer(date, item.value, 0);
-                return false;
-              }
-            });
 
-          }
+          var radioButtons = $("input[name='optionsRadios']");
+          $.each(radioButtons, function (index, item) {
+            if (item.checked) {
+              updateLayer(date, item.value, 0);
+              return false;
+            }
+          });
+
         }
 
         </script>
