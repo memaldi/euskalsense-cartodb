@@ -958,7 +958,7 @@
         </div>';
 
         cartoPopup['viento'] = ' \
-        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+        <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.8;"> \
           <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
           <div class="cartodb-popup-content-wrapper" > \
             <div class="cartodb-popup-content"> \
@@ -969,7 +969,7 @@
               <h4>fecha</h4> \
               <p style="color:black;">{{fecha}}</p> \
               <h4>Viento</h4> \
-              <p style="color:black;">{{fuerza}} ºC</p> \
+              <p style="color:black;">{{fuerza}} m/s - {{dir}}º</p> \
             </div> \
           </div> \
           <div class="cartodb-popup-tip-container"></div> \
@@ -1389,6 +1389,21 @@
                 sql: "SELECT * FROM " + currentTableName + " WHERE (fecha >= ('" + max +  "') AND fecha <= ('" + max + "') AND valor IS NOT NULL)",
                 cartocss: cartoCSS[currentTableName]
               }
+
+              cartoDBLayer.getSubLayer(1).set(subLayerOptions).on('featureClick', function(event, latlng, pos, data, layerIndex) {
+                var popupSQL = "SELECT fecha, nombre_estacion FROM v_vien WHERE cartodb_id = " + data.cartodb_id;
+
+                sql.execute(popupSQL)
+                  .done(function(data) {
+                    var fecha = data.rows[0].fecha;
+                                  var nombre_estacion = data.rows[0].nombre_estacion;
+                                  drawChart(fecha, nombre_estacion, layerIndex);
+                  })
+                  .error(function(errors) {
+                    console.log("errors:" + errors);
+                  });
+              });
+
               cartoDBLayer.getSubLayer(0)
                           .set(subLayerOptions)
                           .on('featureClick', function(event, latlng, pos, data, layerIndex) {
@@ -1416,6 +1431,9 @@
               // errors contains a list of errors
               console.log("errors:" + errors);
           });
+
+          cartoDBLayer.getSubLayer(0).show();
+          cartoDBLayer.getSubLayer(1).hide();
         });
 
         function onComponentSelect(value) {
@@ -1553,6 +1571,15 @@
         }
 
         function updateLayer(date, table_name, sublayer_number) {
+
+          if (table_name == 'viento') {
+            sublayer_number = 1;
+            cartoDBLayer.getSubLayer(0).hide();
+            cartoDBLayer.getSubLayer(1).show();
+          } else {
+            cartoDBLayer.getSubLayer(1).hide();
+            cartoDBLayer.getSubLayer(0).show();
+          }
 
           currentTableName = table_name;
 
