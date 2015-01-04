@@ -123,7 +123,7 @@
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="optionsRadios" id="optionsViento" value="viento" onclick="onComponentSelect(value)">
+                <input type="radio" name="optionsRadios" id="optionsViento" value="v_vien" onclick="onComponentSelect(value)">
                 Viento
               </label>
             </div>
@@ -268,28 +268,29 @@
 
         var unitsIndex = {}
         unitsIndex['t_c2_ba'] = 'ºC';
-        unitsIndex['benceno'] = '&#181;g/m3';
-        unitsIndex['viento'] = 'm/s';
+        unitsIndex['benceno'] = 'µg/m3';
+        unitsIndex['v_vien'] = 'm/s';
         unitsIndex['ch4'] = 'mg/m3';
         unitsIndex['co'] = 'mg/m3';
+        unitsIndex['etilbenceno'] = 'µg/m3';
         unitsIndex['h'] = '%';
         unitsIndex['hcnm'] = 'mg/m3';
-        unitsIndex['m_p_xileno'] = '&#181;g/m3';
-        unitsIndex['nh3'] = '&#181;g/m3';
-        unitsIndex['no'] = '&#181;g/m3';
-        unitsIndex['no2'] = '&#181;g/m3';
-        unitsIndex['nox'] = '&#181;g/m3';
-        unitsIndex['o3'] = '&#181;g/m3';
-        unitsIndex['ortoxileno'] = '&#181;g/m3';
+        unitsIndex['m_p_xileno'] = 'µg/m3';
+        unitsIndex['nh3'] = 'µ/m3';
+        unitsIndex['no'] = 'µ/m3';
+        unitsIndex['no2'] = 'µ/m3';
+        unitsIndex['nox'] = 'µg/m3';
+        unitsIndex['o3'] = 'µg/m3';
+        unitsIndex['ortoxileno'] = 'µg/m3';
         unitsIndex['p'] = 'mBar';
-        unitsIndex['pm2_2c5'] = '&#181;g/m3';
-        unitsIndex['pm10'] = '&#181;g/m3';
+        unitsIndex['pm2_2c5'] = 'µg/m3';
+        unitsIndex['pm10'] = 'µg/m3';
         unitsIndex['precipitacion'] = 'l/m2';
         unitsIndex['r'] = 'w/m2';
         unitsIndex['r_uva'] = 'w/m2';
-        unitsIndex['sh2'] = '&#181;g/m3';
-        unitsIndex['so2'] = '&#181;g/m3';
-        unitsIndex['tolueno'] = '&#181;g/m3';
+        unitsIndex['sh2'] = 'µg/m3';
+        unitsIndex['so2'] = 'µg/m3';
+        unitsIndex['tolueno'] = 'µg/m3';
 
         var cartoCSS = {};
         cartoCSS['t_c2_ba'] = " \
@@ -353,7 +354,7 @@
            marker-fill: #d51510; \
         }";
 
-        cartoCSS['viento'] = " \
+        cartoCSS['v_vien'] = " \
         #v_vien{ \
           marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/0kt.svg); \
           marker-fill-opacity: 0.9; \
@@ -822,7 +823,7 @@
           </li> \
         </ul>';
 
-        cartoLegend['viento'] = '';
+        cartoLegend['v_vien'] = '';
 
         cartoLegend['ch4'] = '';
 
@@ -957,7 +958,7 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
-        cartoPopup['viento'] = ' \
+        cartoPopup['v_vien'] = ' \
         <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.8;"> \
           <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
           <div class="cartodb-popup-content-wrapper" > \
@@ -1397,7 +1398,7 @@
                   .done(function(data) {
                     var fecha = data.rows[0].fecha;
                                   var nombre_estacion = data.rows[0].nombre_estacion;
-                                  drawChart(fecha, nombre_estacion, layerIndex);
+                                  drawChart(fecha, nombre_estacion, currentTableName);
                   })
                   .error(function(errors) {
                     console.log("errors:" + errors);
@@ -1409,7 +1410,7 @@
                           .on('featureClick', function(event, latlng, pos, data, layerIndex) {
 
                             var popupSQL;
-                            if (currentTableName == 'viento') {
+                            if (currentTableName == 'v_vien') {
                               popupSQL = "SELECT fecha, nombre_estacion FROM v_vien WHERE cartodb_id = " + data.cartodb_id;
                             } else {
                               popupSQL = "SELECT fecha, nombre_estacion FROM " + currentTableName + " WHERE cartodb_id = " + data.cartodb_id;
@@ -1419,7 +1420,7 @@
                                 .done(function(data) {
                                   var fecha = data.rows[0].fecha;
                                   var nombre_estacion = data.rows[0].nombre_estacion;
-                                  drawChart(fecha, nombre_estacion, layerIndex);
+                                  drawChart(fecha, nombre_estacion, currentTableName);
                                 })
                                 .error(function(errors) {
                                   // errors contains a list of errors
@@ -1442,7 +1443,7 @@
           updateLayer(date, value, 0);
         }
 
-        function drawChart(date, station_name, layerIndex) {
+        function drawChart(date, station_name, currentTableName) {
           // Remove graph
           d3.select("svg")
             .remove();
@@ -1504,7 +1505,7 @@
 
           bottom_limit = date.split('T')[0] + "T00:00:00";
           top_limit =  date.split('T')[0] + "T23:00:00";
-          sql.execute("SELECT fecha, valor FROM " + layerIndexArray[layerIndex] +" WHERE (fecha >= ('" + bottom_limit +  "') AND fecha <= ('" + top_limit + "') AND nombre_estacion = '" + station_name + "' AND valor IS NOT NULL) ORDER BY fecha ASC")
+          sql.execute("SELECT fecha, valor FROM " + currentTableName +" WHERE (fecha >= ('" + bottom_limit +  "') AND fecha <= ('" + top_limit + "') AND nombre_estacion = '" + station_name + "' AND valor IS NOT NULL) ORDER BY fecha ASC")
               .done(function(data) {
                 var chartData = new Array()
                 var valueAccum = 0;
@@ -1514,6 +1515,7 @@
                   chartData.push({'fecha': chartDate, 'valor': valueAccum});
                 });
                 x.domain(d3.extent(chartData, function(d) { return d.fecha; }));
+                //TODO: Fix this
                 y.domain([0, d3.max(chartData, function(d) { return d.valor; }) + 2]);
 
                 svg.append("path")
@@ -1572,7 +1574,7 @@
 
         function updateLayer(date, table_name, sublayer_number) {
 
-          if (table_name == 'viento') {
+          if (table_name == 'v_vien') {
             sublayer_number = 1;
             cartoDBLayer.getSubLayer(0).hide();
             cartoDBLayer.getSubLayer(1).show();
@@ -1585,7 +1587,7 @@
 
           var layoutSQL;
 
-          if (table_name != 'viento') {
+          if (table_name != 'v_vien') {
             layoutSQL = "SELECT * FROM " + table_name + " WHERE (fecha >= ('" + date +  "') AND fecha <= ('" + date + "') AND valor IS NOT NULL)";
           } else {
             layoutSQL = "SELECT v_vien.fecha as fecha, v_vien.the_geom_webmercator, v_vien.cartodb_id, v_vien.nombre_estacion as nombre_estacion, v_vien.valor as fuerza, d_vien.valor as dir, v_vien.localidad as localidad, v_vien.direccion_estacion as direccion_estacion FROM v_vien, d_vien WHERE (v_vien.fecha >= ('" + date + "') AND v_vien.fecha <= ('" + date + "') AND v_vien.valor is not Null AND v_vien.fecha = d_vien.fecha AND v_vien.nombre_estacion = d_vien.nombre_estacion)";
