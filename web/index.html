@@ -72,6 +72,7 @@
         <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom styles for this template -->
         <!--<link href="starter-template.css" rel="stylesheet">-->
+        <link rel="stylesheet" type="text/css" href="static/datetimepicker/jquery.datetimepicker.css"/ >
         <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
         <title>EuskalSense</title>
     </head>
@@ -103,7 +104,8 @@
           <div class="form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input type="datetime-local" class="form-control" id="datetime-picker" style="width: 233px;" >
+                <!-- <input type="datetime-local" class="form-control" id="datetime-picker" style="width: 233px;" > -->
+                <input id="datetime-picker" type="text" >
               </div>
             </div>
             <button type="submit" class="btn btn-default" onclick="updateDate()">Check</button>
@@ -257,6 +259,7 @@
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="static/datetimepicker/jquery.datetimepicker.js"></script>
         <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
         <script src="static/bootstrap/js/bootstrap.min.js"></script>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -1375,16 +1378,19 @@
 
         var currentTableName = 't_c2_ba';
 
-
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/40bbb0d4-878e-11e4-a0fd-0e018d66dc29/viz.json')
         .done(function(vis, layers) {
           cartoDBLayer = layers[1];
           sql.execute("SELECT MAX(fecha) as maxFecha, MIN(fecha) as minFecha FROM (SELECT fecha FROM v_vien UNION ALL SELECT fecha FROM t_c2_ba) as subQuery")
             .done(function(data) {
               var max = data.rows[0].maxfecha;
+              var date = max.split('T')[0].replace(/-/g, '/');
               //updateLayer(max, layerIndexArray[0], 0);
+              jQuery('#datetime-picker').datetimepicker({
+                startDate: date
+              });
               var datetime = $("#datetime-picker");
-              datetime.attr('value', String(max).replace('Z', ''));
+              datetime.attr('value', String(max).replace('Z', '').replace('T', ' '));
 
               var subLayerOptions = {
                 sql: "SELECT * FROM " + currentTableName + " WHERE (fecha >= ('" + max +  "') AND fecha <= ('" + max + "') AND valor IS NOT NULL)",
