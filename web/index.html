@@ -1375,7 +1375,6 @@
           <div class="cartodb-popup-tip-container"></div> \
         </div>';
 
-
         var currentTableName = 't_c2_ba';
 
         cartodb.createVis('map', 'http://memaldi.cartodb.com/api/v2/viz/40bbb0d4-878e-11e4-a0fd-0e018d66dc29/viz.json')
@@ -1579,6 +1578,8 @@
         }
 
         function updateLayer(date, table_name, sublayer_number) {
+
+          var popup = $(".cartodb-popup.v2").hide();
 
           var chart = d3.select("svg");
 
