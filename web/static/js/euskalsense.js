@@ -671,8 +671,8 @@ cartoLegend['so2'] = '';
 
 cartoLegend['tolueno'] = '';
 
-var cartoPopup = {};
-cartoPopup['t_c2_ba'] = ' \
+var cartoPopup = [];
+cartoPopup['normal'] = ' \
 <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
   <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
@@ -684,13 +684,13 @@ cartoPopup['t_c2_ba'] = ' \
       <h4>fecha</h4> \
       <p style="color:black;">{{fecha}}</p> \
       <h4>Temperatura</h4> \
-      <p style="color:black;">{{valor}} ºC</p> \
+      <p style="color:black;">{{valor}} {0}</p> \
     </div> \
   </div> \
   <div class="cartodb-popup-tip-container"></div> \
 </div>';
 
-cartoPopup['v_vien'] = ' \
+cartoPopup['viento'] = ' \
 <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.8;"> \
   <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
@@ -708,401 +708,21 @@ cartoPopup['v_vien'] = ' \
   <div class="cartodb-popup-tip-container"></div> \
 </div>';
 
-cartoPopup['benceno'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>benceno</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
+String.format = function() {
+    // The string containing the format items (e.g. "{0}")
+    // will and always has to be the first argument.
+    var theString = arguments[0];
 
-cartoPopup['ch4'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>CH4</h4> \
-      <p style="color:black;">{{valor}} mg/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
+    // start with the second argument (i = 1)
+    for (var i = 1; i < arguments.length; i++) {
+        // "gm" = RegEx options for Global search (more than one instance)
+        // and for Multiline search
+        var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+        theString = theString.replace(regEx, arguments[i]);
+    }
 
-cartoPopup['co'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>CO</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['etilbenceno'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Etilbenceno</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['h'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>H</h4> \
-      <p style="color:black;">{{valor}} %</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['hcnm'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>HCNM</h4> \
-      <p style="color:black;">{{valor}} mg/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['m_p_xileno'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>M-P-Xileno</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['nh3'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>NH3</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['no'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>NO</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['no2'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>NO2</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['nox'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>NOx</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['o3'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>O3</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['ortoxileno'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Ortoxileno</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['p'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Presión atmosférica</h4> \
-      <p style="color:black;">{{valor}} mBar</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['pm2_2c5'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>PM 2.5</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['pm10'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>PM 10</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['precipitacion'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Precipitaciones</h4> \
-      <p style="color:black;">{{valor}} l/m2</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['r'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Radiación</h4> \
-      <p style="color:black;">{{valor}} w/m2</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['r_uva'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Radiación Ultravioleta</h4> \
-      <p style="color:black;">{{valor}} w/m2</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['sh2'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>SH2</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['so2'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>SO2</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
-
-cartoPopup['tolueno'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
-  <div class="cartodb-popup-content-wrapper" > \
-    <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
-      <p style="color:black;">        {{nombre_estacion}}</p> \
-      <p style="color:black;">{{direccion_estacion}}</p> \
-      <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
-      <p style="color:black;">{{fecha}}</p> \
-      <h4>Tolueno</h4> \
-      <p style="color:black;">{{valor}} &#181;g/m3</p> \
-    </div> \
-  </div> \
-  <div class="cartodb-popup-tip-container"></div> \
-</div>';
+    return theString;
+}
 
 function EuskalSense(user, visualization) {
     var sql = new cartodb.SQL({ user: user });
@@ -1343,9 +963,16 @@ function EuskalSense(user, visualization) {
                 sql: layoutSQL,
                 cartocss: cartoCSS[table_name]
               }
+
+
+          var popup_name = 'normal';
+          if (table_name == 'v_vien') {
+            popup_name = 'viento';
+          }
+
           cartoDBLayer.getSubLayer(sublayer_number)
                       .set(subLayerOptions)
-                      .infowindow.set('template', cartoPopup[table_name]);
+                      .infowindow.set('template', String.format(cartoPopup[popup_name], unitsIndex[table_name]));
           var legend = $(".cartodb-legend.choropleth")[0];
           legend.innerHTML = cartoLegend[table_name];
         }
