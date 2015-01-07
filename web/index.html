@@ -1580,6 +1580,12 @@
 
         function updateLayer(date, table_name, sublayer_number) {
 
+          var chart = d3.select("svg");
+
+          if (chart[0][0] != null) {
+            d3.select("svg").remove();
+          }
+
           if (table_name == 'v_vien') {
             sublayer_number = 1;
             cartoDBLayer.getSubLayer(0).hide();
