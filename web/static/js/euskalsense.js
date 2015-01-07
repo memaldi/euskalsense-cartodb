@@ -674,7 +674,7 @@ cartoLegend['tolueno'] = '';
 var cartoPopup = [];
 cartoPopup['normal'] = ' \
 <div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;" onclick="closePopup()">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
     <div class="cartodb-popup-content"> \
       <h4>Estación</h4> \
@@ -691,8 +691,8 @@ cartoPopup['normal'] = ' \
 </div>';
 
 cartoPopup['viento'] = ' \
-<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.8;"> \
-  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;">x</a> \
+<div class="cartodb-popup v2" style="background: dimgray; opacity: 0.9;"> \
+  <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;" onclick="closePopup()">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
     <div class="cartodb-popup-content"> \
       <h4>Estación</h4> \
