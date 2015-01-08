@@ -49,150 +49,31 @@
             <button type="submit" class="btn btn-default" onclick="updateDate()" id="dateSelectorButton" data-i18n="dateSelectorButton"></button>
           </div>
           <form role="form">
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsTemperatura" value="t_c2_ba" checked onclick="onComponentSelect(value)">
-                <span data-i18n="radio.temperature"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsBenceno" value="benceno" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.benzene"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsViento" value="v_vien" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.wind"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsCH4" value="ch4" onclick="onComponentSelect(value)">
-                CH<sub>4</sub>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsCO" value="co" onclick="onComponentSelect(value)">
-                CO
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsEtilbenceno" value="etilbenceno" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.etilbenzene"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsH" value="h" onclick="onComponentSelect(value)">
-                H
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsHCNM" value="hcnm" onclick="onComponentSelect(value)">
-                HCNM
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsm_p_xileno" value="m_p_xileno" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.mpxylene"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsNH3" value="nh3" onclick="onComponentSelect(value)">
-                NH<sub>3</sub>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsNO" value="no" onclick="onComponentSelect(value)">
-                NO
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsNO2" value="no2" onclick="onComponentSelect(value)">
-                NO<sub>2</sub>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsNOX" value="nox" onclick="onComponentSelect(value)">
-                NOx
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsO3" value="o3" onclick="onComponentSelect(value)">
-                O<sub>3</sub>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsOrtoxileno" value="ortoxileno" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.orthoxylene"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsP" value="p" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.pressure"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsPM25" value="pm2_2c5" onclick="onComponentSelect(value)">
-                PM 2.5
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsPM10" value="pm10" onclick="onComponentSelect(value)">
-                PM 10
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsPrecipitacion" value="precipitacion" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.rain"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsR" value="r" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.radiation"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsR_UVA" value="r_uva" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.ultraviolet"></span>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsSH2" value="sh2" onclick="onComponentSelect(value)">
-                SH2
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsSO2" value="so2" onclick="onComponentSelect(value)">
-                SO2
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsTolueno" value="tolueno" onclick="onComponentSelect(value)">
-                <span data-i18n="radio.toluene"></span>
-              </label>
-            </div>
+            <select class="form-control" name="compoundSelector" onchange="updateCompound(value)">
+              <option value="t_c2_ba" data-i18n="form-control.temperature" selected></option>
+              <option value="benceno" data-i18n="form-control.benzene"></option>
+              <option value="v_vien" data-i18n="form-control.wind"></option>
+              <option value="ch4"><span>CH<sub>4</sub></span></option>
+              <option value="co"><span>CO</span></option>
+              <option value="etilbenceno" data-i18n="form-control.etilbenzene"></option>
+              <option value="h"><span>H</span></option>
+              <option value="hcnm"><span>HCNM</span></option>
+              <option value="m_p_xileno" data-i18n="form-control.mpxylene"></option>
+              <option value="nh3"><span>NH<sub>3</sub></span></option>
+              <option value="no"><span>NO</sub></span></option>
+              <option value="no2"><span>NO<sub>2</sub></span></option>
+              <option value="nox"><span>NO<sub>x</sub></span></option>
+              <option value="o3"><span>O<sub>3</sub></span></option>
+              <option value="ortoxileno" data-i18n="form-control.orthoxylene"></option>
+              <option value="p" data-i18n="form-control.pressure"></option>
+              <option value="pm2_2c5"><span>PM2.5</span></option>
+              <option value="pm10"><span>PM10</span></option>
+              <option value="precipitacion" data-i18n="form-control.rain"></option>
+              <option value="r" data-i18n="form-control.radiation"></option>
+              <option value="r_uva" data-i18n="form-control.ultraviolet"></option>
+              <option value="sh2"><span>SH<sub>2</sub></span></option>
+              <option value="so2"><span>SO<sub>2</sub></span></option>
+            </select>
           </form>
         </div>
 
@@ -228,7 +109,7 @@
 
       i18n.init(option);
       $(".nav").i18n();
-      $(".radio").i18n();
+      $(".form-control").i18n();
       $("#dateSelectorButton").i18n();
       $(".cartodb-popup-content").i18n();
 
@@ -244,7 +125,7 @@
       var euskalsense = new EuskalSense('memaldi', 'http://memaldi.cartodb.com/api/v2/viz/40bbb0d4-878e-11e4-a0fd-0e018d66dc29/viz.json', popupOption);
       euskalsense.init();
 
-      function onComponentSelect(value) {
+      function updateCompound(value) {
           console.log(value);
           var date = $("#datetime-picker")[0].value;
           euskalsense.updateLayer(date, value, 0);
@@ -253,13 +134,8 @@
       function updateDate() {
           var date = $("#datetime-picker")[0].value;
 
-          var radioButtons = $("input[name='optionsRadios']");
-          $.each(radioButtons, function (index, item) {
-            if (item.checked) {
-              euskalsense.updateLayer(date, item.value, 0);
-              return false;
-            }
-          });
+          var compoundSelector = $("select[name='compoundSelector']");
+          euskalsense.updateLayer(date, compoundSelector.val(), 0);
 
         }
 

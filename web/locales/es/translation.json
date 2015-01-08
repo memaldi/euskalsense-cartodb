@@ -5,7 +5,7 @@
     "contact": "Contacto"
   },
   "dateSelectorButton": "Enviar",
-  "radio": {
+  "form-control": {
     "temperature": "Temperatura",
     "benzene": "Benceno",
     "wind": "Viento",
