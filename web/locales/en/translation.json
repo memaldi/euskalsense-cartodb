@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "dateSelectorButton": "Check",
+  "radio": {
+    "temperature": "Temperature",
+    "benzene": "Benzene",
+    "wind": "Wind",
+    "etilbenzene": "Etilbenzene",
+    "mpxylene": "M-P-Xylene",
+    "orthoxylene": "Orthoxylene",
+    "pressure": "Atmospheric pressure",
+    "rain": "Rain",
+    "radiation": "Radiation",
+    "ultraviolet": "Ultraviolet radation",
+    "toluene": "Toluene"
+  },
+  "popup": {
+    "title": "Station",
+    "date": "Date",
+    "value": "Value"
+  },
+  "starter-template": {
+    "title": "About EuskalSense",
+    "p1": "The aim of EuskalSense is to visualize data about air's quality in Basque Country. The data is publicly available from <a href=\"http://opendata.euskadi.net\">OpenData Euskadi</a> and it is visualized thanks to <a href=\"http://cartodb.com/\">CartoDB</a>.",
+    "p2": "The source code of Euskalsense is freely available in <a href=\"https://github.com/memaldi/euskalsense-cartodb\">GitHub</a>, ready for forking ;-)",
+    "contactTitle": "Contact",
+    "contactText": "For any bug or suggestion feel free to open an issue in <a href=\"https://github.com/memaldi/euskalsense-cartodb\">GitHub</a> or to contact me by e-mail:",
+    "contactAddress": "<strong>Mikel Emaldi</strong><br>Deusto Institute of Technology - INTERNET unit<br>Avda. de las Universidades 24, 48007 Bilbao, Bizkaia, Spain<br><a href=\"mailto:m.emaldi@deusto.EuskalSense\">m.emaldi@deusto.es</a>"
+  }
+}
