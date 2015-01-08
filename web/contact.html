@@ -23,13 +23,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">EuskalSense</a>
+              <a class="navbar-brand" href="index.html">EuskalSense</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="index.html" data-i18n="nav.home"></a></li>
+                <li><a href="about.html" data-i18n="nav.about"></a></li>
+                <li class="active"><a href="contact.html" data-i18n="nav.contact"></a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="?setLng=en">en</a></li>
+                <li><a href="?setLng=es">es</a></li>
+                <li><a href="?setLng=eu">eu</a></li>
               </ul>
             </div><!--/.nav-collapse -->
           </div>
@@ -38,17 +43,26 @@
         <div class="container">
 
         <div class="starter-template">
-          <h1>Contact</h1>
-          For any bug or suggestion feel free to open an issue in <a href="https://github.com/memaldi/euskalsense-cartodb">GitHub</a> or to contact me by mail:
+          <h1 data-i18n="starter-template.contactTitle"></h1>
+          <p data-i18n="[html]starter-template.contactText"></p>
           <br><br>
-          <address>
-            <strong>Mikel Emaldi</strong><br>
-            Deusto Institute of Technology - INTERNET unit<br>
-            Avda. de las Universidades 24, 48007 Bilbao, Bizkaia, Spain<br>
-            <a href="mailto:m.emaldi@deusto.EuskalSense">m.emaldi@deusto.es</a>
+          <address data-i18n="[html]starter-template.contactAddress">
           </address>
         </div>
 
       </div><!-- /.container -->
     </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="static/i18next/i18next-1.7.7.js"></script>
+
+    <script type="text/javascript">
+      var option = {
+        getAsync: false
+      };
+
+      i18n.init(option);
+      $(".nav").i18n();
+      $(".starter-template").i18n();
+    </script>
 </html>

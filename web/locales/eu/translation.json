@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "home": "Hasiera",
+    "about": "Honi buruz",
+    "contact": "Kontaktua"
+  },
+  "dateSelectorButton": "Bidali",
+  "radio": {
+    "temperature": "Temperatura",
+    "benzene": "Bentzeno",
+    "wind": "Haizea",
+    "etilbenzene": "Etilbentzeno",
+    "mpxylene": "M-P-Xileno",
+    "orthoxylene": "Ortoxileno",
+    "pressure": "Presio atmosferikoa",
+    "rain": "Euria",
+    "radiation": "Erradiazio",
+    "ultraviolet": "Erradiazio ultramore",
+    "toluene": "Tolueno"
+  },
+  "popup": {
+    "title": "Estazioa",
+    "date": "Data",
+    "value": "Balioa"
+  },
+  "starter-template": {
+    "title": "EuskalSenseri buruz",
+    "p1": "Euskalsensek Euskal Autonomi Erkidegoko airearen kalitatea irudikatzea du helburu. Datuak <a href=\"http://opendata.euskadi.net\">OpenData Euskadin</a> daude publikoki eskuragarri eta <a href=\"http://cartodb.com/\">CartoDB-ri</a> esker irudikatuak dira.",
+    "p2": "Euskalsenseren iturburu-kodea <a href=\"https://github.com/memaldi/euskalsense-cartodb\">GitHub-en</a> dago eskuragarri, <i>forkeatzeko</i> prest ;-)",
+    "contactTitle": "Kontaktua",
+    "contactText": "Edozein errore edota iradokizunentzako kontakta ezazu gurekin <a href=\"https://github.com/memaldi/euskalsense-cartodb\">GitHub-en</a> bidez edota e-mailez:",
+    "contactAddress": "<strong>Mikel Emaldi</strong><br>Deusto Institute of Technology - INTERNET unit<br>Unibertsitate Etorbidea 24, 48007 Bilbao, Bizkaia, Spain<br><a href=\"mailto:m.emaldi@deusto.EuskalSense\">m.emaldi@deusto.es</a>"
+  }
+}

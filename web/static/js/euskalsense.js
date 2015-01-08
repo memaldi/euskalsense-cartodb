@@ -677,13 +677,13 @@ cartoPopup['normal'] = ' \
   <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;" onclick="closePopup()">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
     <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
+      <h4 id="popupTitle"></h4> \
       <p style="color:black;">{{nombre_estacion}}</p> \
       <p style="color:black;">{{direccion_estacion}}</p> \
       <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
+      <h4 id="popupDate">fecha</h4> \
       <p style="color:black;">{{fecha}}</p> \
-      <h4>Temperatura</h4> \
+      <h4 id="popupValue">Valor</h4> \
       <p style="color:black;">{{valor}} {0}</p> \
     </div> \
   </div> \
@@ -695,13 +695,13 @@ cartoPopup['viento'] = ' \
   <a href="#close" class="cartodb-popup-close-button close" style="background: dimgray; opacity: 0.8;" onclick="closePopup()">x</a> \
   <div class="cartodb-popup-content-wrapper" > \
     <div class="cartodb-popup-content"> \
-      <h4>Estación</h4> \
+      <h4 id="popupTitle">Estación</h4> \
       <p style="color:black;">{{nombre_estacion}}</p> \
       <p style="color:black;">{{direccion_estacion}}</p> \
       <p style="color:black;">{{localidad}}</p> \
-      <h4>fecha</h4> \
+      <h4 id="popupDate">fecha</h4> \
       <p style="color:black;">{{fecha}}</p> \
-      <h4>Viento</h4> \
+      <h4 id="popupValue">Valor</h4> \
       <p style="color:black;">{{fuerza}} m/s - {{dir}}º</p> \
     </div> \
   </div> \
@@ -724,11 +724,12 @@ String.format = function() {
     return theString;
 }
 
-function EuskalSense(user, visualization) {
+function EuskalSense(user, visualization, popupOption) {
     var sql = new cartodb.SQL({ user: user });
     var cartoDBLayer;
     var currentTableName = 't_c2_ba';
     var visualization = visualization;
+    var popupOption = popupOption;
 
     this.init = function() {
         cartodb.createVis('map', visualization)
@@ -764,9 +765,12 @@ function EuskalSense(user, visualization) {
 
                 sql.execute(popupSQL)
                   .done(function(data) {
+                    $("#popupTitle")[0].innerHTML = popupOption['popupTitle'];
+                    $("#popupDate")[0].innerHTML = popupOption['popupDate'];
+                    $("#popupValue")[0].innerHTML = popupOption['popupValue'];
                     var fecha = data.rows[0].fecha;
-                                  var nombre_estacion = data.rows[0].nombre_estacion;
-                                  drawChart(fecha, nombre_estacion, currentTableName);
+                    var nombre_estacion = data.rows[0].nombre_estacion;
+                    drawChart(fecha, nombre_estacion, currentTableName);
                   })
                   .error(function(errors) {
                     console.log("errors:" + errors);
@@ -776,11 +780,12 @@ function EuskalSense(user, visualization) {
               cartoDBLayer.getSubLayer(0)
                           .set(subLayerOptions)
                           .on('featureClick', function(event, latlng, pos, data, layerIndex) {
-
                             popupSQL = "SELECT fecha, nombre_estacion FROM " + currentTableName + " WHERE cartodb_id = " + data.cartodb_id;
-
                             sql.execute(popupSQL)
                                 .done(function(data) {
+                                  $("#popupTitle")[0].innerHTML = popupOption['popupTitle'];
+                                  $("#popupDate")[0].innerHTML = popupOption['popupDate'];
+                                  $("#popupValue")[0].innerHTML = popupOption['popupValue'];
                                   var fecha = data.rows[0].fecha;
                                   var nombre_estacion = data.rows[0].nombre_estacion;
                                   drawChart(fecha, nombre_estacion, currentTableName);
