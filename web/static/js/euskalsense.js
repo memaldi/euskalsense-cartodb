@@ -28,7 +28,7 @@ var cartoCSS = {};
 cartoCSS['t_c2_ba'] = " \
 #t_c2_ba{ \
   marker-fill-opacity: 0.8; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-width: 10; \
@@ -75,7 +75,7 @@ cartoCSS['t_c2_ba'] = " \
 cartoCSS['benceno'] = " \
 #benceno{ \
   marker-fill-opacity: 0.8; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-width: 10; \
@@ -90,7 +90,7 @@ cartoCSS['v_vien'] = " \
 #v_vien{ \
   marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/0kt.svg); \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #c0c0c0; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -139,7 +139,7 @@ cartoCSS['v_vien'] = " \
 cartoCSS['ch4'] = ' \
 #ch4{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -152,7 +152,7 @@ cartoCSS['ch4'] = ' \
 cartoCSS['co'] = ' \
 #co{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -165,7 +165,7 @@ cartoCSS['co'] = ' \
 cartoCSS['etilbenceno'] = ' \
 #etilbenceno{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -178,7 +178,7 @@ cartoCSS['etilbenceno'] = ' \
 cartoCSS['h'] = ' \
 #h{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -218,7 +218,7 @@ cartoCSS['h'] = ' \
 cartoCSS['hcnm'] = ' \
 #hcnm{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -231,7 +231,7 @@ cartoCSS['hcnm'] = ' \
 cartoCSS['m_p_xileno'] = ' \
 #m_p_xileno{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -244,7 +244,7 @@ cartoCSS['m_p_xileno'] = ' \
 cartoCSS['nh3'] = ' \
 #nh3{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -257,7 +257,7 @@ cartoCSS['nh3'] = ' \
 cartoCSS['no'] = ' \
 #no{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -270,7 +270,7 @@ cartoCSS['no'] = ' \
 cartoCSS['no2'] = ' \
 #no2{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -340,7 +340,7 @@ cartoCSS['no2'] = ' \
 cartoCSS['nox'] = ' \
 #nox{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -353,7 +353,7 @@ cartoCSS['nox'] = ' \
 cartoCSS['o3'] = ' \
 #o3{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -366,7 +366,7 @@ cartoCSS['o3'] = ' \
 cartoCSS['ortoxileno'] = ' \
 #ortoxileno{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -379,7 +379,7 @@ cartoCSS['ortoxileno'] = ' \
 cartoCSS['p'] = ' \
 #p{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -392,7 +392,7 @@ cartoCSS['p'] = ' \
 cartoCSS['pm2_2c5'] = ' \
 #pm2_2c5{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -405,7 +405,7 @@ cartoCSS['pm2_2c5'] = ' \
 cartoCSS['pm10'] = ' \
 #pm10{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -419,7 +419,7 @@ cartoCSS['precipitacion'] = ' \
 #precipitacion{ \
   marker-file: url(http://apps.morelab.deusto.es/euskalsense/static/img/rain.svg); \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -450,7 +450,7 @@ cartoCSS['precipitacion'] = ' \
 cartoCSS['r'] = ' \
 #r{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -463,7 +463,7 @@ cartoCSS['r'] = ' \
 cartoCSS['r_uva'] = ' \
 #r_uva{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -476,7 +476,7 @@ cartoCSS['r_uva'] = ' \
 cartoCSS['sh2'] = ' \
 #sh2{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -489,7 +489,7 @@ cartoCSS['sh2'] = ' \
 cartoCSS['so2'] = ' \
 #so2{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \
@@ -502,7 +502,7 @@ cartoCSS['so2'] = ' \
 cartoCSS['tolueno'] = ' \
 #tolueno{ \
   marker-fill-opacity: 0.9; \
-  marker-line-color: #FFF; \
+  marker-line-color: #000000; \
   marker-line-width: 1.5; \
   marker-line-opacity: 1; \
   marker-placement: point; \

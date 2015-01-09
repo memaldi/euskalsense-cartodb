@@ -13,11 +13,13 @@ html, body, #map {
   top: 180px;
   left: 20px;
   padding: 0;
-  width: 305px;
   }
 body {
   padding-top: 50px;
   margin-bottom: 60px;
+}
+button, input, optgroup, select, textarea {
+  margin-top: 5px;
 }
 .footer {
   position: relative;
