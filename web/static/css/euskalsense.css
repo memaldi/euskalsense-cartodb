@@ -63,12 +63,12 @@ button, input, optgroup, select, textarea {
 .axis path,
 .axis line {
   fill: none;
-  stroke: white;
+  stroke: black;
   shape-rendering: crispEdges;
 }
 
 .x.axis path {
-  display: none;
+  stroke: black;
 }
 .area {
   fill: dimgray;
@@ -82,7 +82,8 @@ button, input, optgroup, select, textarea {
 }
 text {
   font-size: 15px;
-  stroke: silver;
+  stroke: gray;
+  fill: gray;
 }
 div.tooltip {
   position: absolute;
@@ -92,7 +93,7 @@ div.tooltip {
   padding: 2px;
   font: 15px sans-serif;
   /*background: red;*/
-  color: silver;
+  color: black;
   border: 8px;
   border-radius: 8px;
   pointer-events: none;
